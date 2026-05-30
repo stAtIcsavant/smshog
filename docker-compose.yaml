@@ -1,0 +1,11 @@
+services:
+  smshog:
+    image: smshog:latest
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - smshog-data:/app/data
+
+volumes:
+  smshog-data:

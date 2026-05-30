@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="flap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7dd3fc"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Envelope body -->
+  <rect x="4" y="12" width="56" height="44" rx="6" fill="url(#body)"/>
+
+  <!-- Envelope flap crease (V) — apex sits well above the SMS pill -->
+  <polygon points="4,12 32,28 60,12" fill="url(#flap)"/>
+
+  <!-- Flap underline for definition -->
+  <line x1="4" y1="12" x2="32" y2="28" stroke="#0369a1" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="32" y1="28" x2="60" y2="12" stroke="#0369a1" stroke-width="0.6" stroke-linecap="round"/>
+
+  <!-- SMS bubble (sits cleanly below the flap apex at y=28) -->
+  <rect x="14" y="33" width="36" height="14" rx="7" fill="white"/>
+
+  <!-- Bubble tail -->
+  <polygon points="22,47 18,53 27,47" fill="white"/>
+
+  <!-- Three dots inside bubble -->
+  <circle cx="22" cy="40" r="2" fill="#0ea5e9"/>
+  <circle cx="32" cy="40" r="2" fill="#0ea5e9"/>
+  <circle cx="42" cy="40" r="2" fill="#0ea5e9"/>
+</svg>

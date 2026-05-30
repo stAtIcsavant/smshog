@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>SMSHog</title>
+    <style>
+      /* Dark theme (default) — matches Docker Desktop's dark theme */
+      :root {
+        --bg: #0f1117;
+        --surface: #1e2535;
+        --border: #334155;
+        --text: #e2e8f0;
+        --text-2: #cbd5e1;
+        --text-muted: #94a3b8;
+        --text-muted-2: #64748b;
+        --text-faint: #475569;
+        --accent: #38bdf8;
+        --accent-strong: #0ea5e9;
+        --danger: #ef4444;
+        --danger-2: #f87171;
+        --success: #34d399;
+        --scrollbar-thumb: #334155;
+      }
+
+      /* Light theme — kicks in when Docker Desktop is in light mode */
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #ffffff;
+          --surface: #f1f5f9;
+          --border: #cbd5e1;
+          --text: #0f172a;
+          --text-2: #1e293b;
+          --text-muted: #475569;
+          --text-muted-2: #64748b;
+          --text-faint: #94a3b8;
+          --accent: #0284c7;
+          --accent-strong: #0369a1;
+          --danger: #dc2626;
+          --danger-2: #ef4444;
+          --success: #16a34a;
+          --scrollbar-thumb: #cbd5e1;
+        }
+      }
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body, #root { height: 100%; }
+      body { background: var(--bg); color: var(--text); }
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+      input[type=range] { accent-color: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

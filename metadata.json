@@ -1,0 +1,19 @@
+{
+  "icon": "smshog.svg",
+  "ui": {
+    "dashboard-tab": {
+      "title": "SMSHog",
+      "root": "ui",
+      "src": "index.html"
+    }
+  },
+  "vm": {
+    "composefile": "docker-compose.yaml",
+    "exposes": {
+      "socket": "smshog.sock"
+    }
+  },
+  "host": {
+    "binaries": []
+  }
+}

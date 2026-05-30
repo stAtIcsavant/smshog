@@ -1,0 +1,51 @@
+{
+  "name": "smshog-twilio",
+  "version": "1.0.0",
+  "description": "Drop-in Twilio SDK interceptor for local development and CI. Routes client.messages.create() calls to a running SMSHog instance instead of the real Twilio API. Zero runtime dependencies.",
+  "main": "index.js",
+  "module": "index.mjs",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.mjs",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "test": "node --test test.js",
+    "prepublishOnly": "npm test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "twilio",
+    "sms",
+    "smshog",
+    "mailhog",
+    "mock",
+    "stub",
+    "intercept",
+    "testing",
+    "ci",
+    "development",
+    "docker-desktop-extension"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smshog/smshog.git",
+    "directory": "packages/smshog-twilio"
+  },
+  "bugs": {
+    "url": "https://github.com/smshog/smshog/issues"
+  },
+  "homepage": "https://github.com/smshog/smshog/tree/main/packages/smshog-twilio#readme",
+  "license": "MIT",
+  "sideEffects": false
+}

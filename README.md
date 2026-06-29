@@ -44,6 +44,103 @@ smshog/
 └── Dockerfile
 ```
 
+## Installation
+
+### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) 4.8 or later
+
+### Docker Desktop extension
+
+Install from a pre-built image:
+
+```bash
+docker extension install smshog:latest
+```
+
+Or build and install locally:
+
+```bash
+git clone https://github.com/your-org/smshog
+cd smshog
+docker build -t smshog:latest .
+docker extension install smshog:latest
+```
+
+### npm helper package (optional)
+
+If you use the Twilio Node SDK, install the companion package in your project:
+
+```bash
+npm install --save-dev smshog-twilio
+```
+
+This gives you `patchTwilio`, `unpatchTwilio`, and `createSmshogClient` — no Twilio credentials required in local dev or CI.
+
+---
+
+## How To Use
+
+### 1. Send SMS to SMSHog
+
+There are three ways to point your code at SMSHog instead of real Twilio:
+
+**Patch an existing Twilio client (Node.js):**
+
+```js
+const twilio = require('twilio');
+const { patchTwilio } = require('smshog-twilio');
+
+const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+if (process.env.NODE_ENV !== 'production') patchTwilio(client);
+
+await client.messages.create({
+  to: '+15555550100',
+  from: '+15555550199',
+  body: 'Your OTP is 123456',
+});
+```
+
+**Use a fake Twilio client (no credentials needed — ideal for CI):**
+
+```js
+const { createSmshogClient } = require('smshog-twilio');
+const client = createSmshogClient();
+await client.messages.create({ to: '+1...', from: '+1...', body: 'Hello CI' });
+```
+
+**POST directly (any language):**
+
+```bash
+curl -X POST http://localhost:9090/api/sms \
+  -H 'Content-Type: application/json' \
+  -d '{"to":"+15555550100","from":"+15555550199","body":"Your OTP is 123456"}'
+```
+
+### 2. Inspect messages in the UI
+
+Open Docker Desktop and click the **SMSHog** tab. Three tabs are available:
+
+- **Inbox** — view captured messages, search by phone number or body, manually override delivery status, and simulate inbound replies
+- **Webhooks** — configure endpoints that receive a copy of every captured SMS in real time
+- **Settings** — enable/disable delivery simulation, set delay, and configure the failure rate
+
+### 3. Configure the SMSHog URL
+
+By default SMSHog listens on `http://localhost:9090`. If you run it under a different host or port, set the environment variable before starting your app:
+
+```bash
+SMSHOG_URL=http://smshog:9090 node your-app.js
+```
+
+Or pass it as an option when patching:
+
+```js
+patchTwilio(client, { url: 'http://smshog:9090' });
+```
+
+---
+
 ## Quickstart
 
 ### 1. Install the Docker Desktop extension

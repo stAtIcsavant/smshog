@@ -1,6 +1,6 @@
 services:
   smshog:
-    image: smshog:latest
+    image: ${DESKTOP_PLUGIN_IMAGE}
     restart: unless-stopped
     ports:
       - "9090:9090"

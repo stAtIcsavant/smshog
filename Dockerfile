@@ -17,10 +17,13 @@ LABEL org.opencontainers.image.title="SMSHog" \
       org.opencontainers.image.description="MailHog-style SMS capture for local development" \
       org.opencontainers.image.vendor="SMSHog" \
       com.docker.desktop.extension.api.version=">= 0.3.0" \
-      com.docker.extension.screenshots='[{"alt":"SMSHog inbox","url":"https://raw.githubusercontent.com/smshog/smshog/main/screenshot.png"}]' \
+      com.docker.desktop.extension.icon="https://raw.githubusercontent.com/stAtIcsavant/smshog/main/smshog.svg" \
+      com.docker.extension.screenshots='[{"alt":"SMSHog inbox","url":"https://raw.githubusercontent.com/stAtIcsavant/smshog/main/screenshot.png"}]' \
       com.docker.extension.detailed-description="Capture and inspect outbound SMS in development. Drop-in Twilio API replacement. Simulate delivery receipts, send replies, and forward to real webhooks." \
-      com.docker.extension.publisher-url="https://github.com/smshog/smshog" \
-      com.docker.extension.additional-urls='[]'
+      com.docker.extension.publisher-url="https://github.com/stAtIcsavant/smshog" \
+      com.docker.extension.additional-urls='[]' \
+      com.docker.extension.categories="testing-tools,utility-tools" \
+      com.docker.extension.changelog="Initial release: Twilio-compatible SMS capture, live inbox, delivery simulation, simulated replies, and webhook forwarding."
 
 WORKDIR /app
 

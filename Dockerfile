@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ── Stage 1: Build the UI ──────────────────────────────────────────────────────
-FROM node:20-alpine AS ui-builder
+FROM node:20.24.0-alpine3.19 AS ui-builder
 WORKDIR /app/ui
 COPY ui/package*.json ./
 # Inline env vars: only active during this RUN, not baked into the image
@@ -10,8 +10,9 @@ COPY ui/ .
 RUN npm run build
 
 # ── Stage 2: Final image ───────────────────────────────────────────────────────
-# node:20 (Debian/buildpack-deps) ships with python3, make, g++ for better-sqlite3
-FROM node:20
+# Use a slimmer runtime base and install only the native build deps required for
+# backend module compilation during image build.
+FROM node:26-slim
 
 LABEL org.opencontainers.image.title="SMSHog" \
       org.opencontainers.image.description="MailHog-style SMS capture for local development" \
@@ -31,7 +32,10 @@ COPY backend/package*.json ./backend/
 # NODE_TLS_REJECT_UNAUTHORIZED=0 is required for node-gyp, which downloads Node.js
 # headers from nodejs.org using its own HTTP client (ignores NPM_CONFIG_STRICT_SSL).
 # Inline so it is NOT present in the running container.
-RUN cd backend && NODE_TLS_REJECT_UNAUTHORIZED=0 NPM_CONFIG_STRICT_SSL=false npm install --omit=dev
+RUN apt-get update && apt-get install -y python3 make g++ && \
+    cd backend && NODE_TLS_REJECT_UNAUTHORIZED=0 NPM_CONFIG_STRICT_SSL=false npm install --omit=dev && \
+    apt-get purge -y --auto-remove python3 make g++ && \
+    rm -rf /var/lib/apt/lists/*
 COPY backend/ ./backend/
 
 # Pre-built UI — must land at /ui to match metadata.json "root": "ui"

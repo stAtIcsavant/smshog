@@ -61,7 +61,7 @@ docker extension install smshog:latest
 Or build and install locally:
 
 ```bash
-git clone https://github.com/your-org/smshog
+git clone https://github.com/treyster/smshog
 cd smshog
 docker build -t smshog:latest .
 docker extension install smshog:latest

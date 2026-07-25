@@ -1,4 +1,4 @@
-# SMSHog 📨
+# 📨 SMSHog 
 
 > MailHog for SMS. Capture, inspect, and simulate outbound SMS in local development — without sending a single real message.
 

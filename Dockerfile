@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ── Stage 1: Build the UI ──────────────────────────────────────────────────────
-FROM node:20.24.0-alpine3.19 AS ui-builder
+FROM node:20-alpine AS ui-builder
 WORKDIR /app/ui
 COPY ui/package*.json ./
 # Inline env vars: only active during this RUN, not baked into the image
@@ -12,7 +12,7 @@ RUN npm run build
 # ── Stage 2: Final image ───────────────────────────────────────────────────────
 # Use a slimmer runtime base and install only the native build deps required for
 # backend module compilation during image build.
-FROM node:26-slim
+FROM node:20-slim
 
 LABEL org.opencontainers.image.title="SMSHog" \
       org.opencontainers.image.description="MailHog-style SMS capture for local development" \
@@ -45,5 +45,9 @@ COPY --from=ui-builder /app/ui/dist /ui
 COPY metadata.json /metadata.json
 COPY docker-compose.yaml /docker-compose.yaml
 COPY smshog.svg /smshog.svg
+
+# Run as non-root user for security
+RUN chown -R node:node /app /ui /metadata.json /docker-compose.yaml /smshog.svg
+USER node
 
 CMD ["node", "backend/server.js"]

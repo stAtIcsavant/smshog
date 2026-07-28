@@ -46,13 +46,17 @@ COPY metadata.json /metadata.json
 COPY docker-compose.yaml /docker-compose.yaml
 COPY smshog.svg /smshog.svg
 
-# Run as non-root user for security.
-# Create /app/data so that a fresh named volume mounted here inherits node
-# ownership — Docker copies the image mountpoint's ownership into an empty
-# volume. Without this, the volume is created root-owned and the non-root
-# process cannot open the SQLite DB (SQLITE_CANTOPEN → crash loop).
-RUN mkdir -p /app/data && \
-    chown -R node:node /app /ui /metadata.json /docker-compose.yaml /smshog.svg
-USER node
+# gosu lets the entrypoint drop from root to the non-root 'node' user after
+# fixing ownership of the runtime-mounted socket dir and data volume.
+RUN apt-get update && apt-get install -y --no-install-recommends gosu && \
+    rm -rf /var/lib/apt/lists/*
 
-CMD ["node", "backend/server.js"]
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh && \
+    mkdir -p /app/data && \
+    chown -R node:node /app /ui
+
+# The container starts as root so the entrypoint can chown the root-owned
+# socket dir (/run/guest-services) and data volume (/app/data), then it drops
+# to the non-root 'node' user via gosu before running the server.
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

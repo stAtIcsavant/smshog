@@ -77,7 +77,13 @@ export default function App() {
   const [connected, setConnected] = useState(false);
 
   const TEST_DEFAULTS = { to: "+15551234567", from: "+15559999999", body: "Hello from SMSHog!", callbackUrl: "" };
-  const [test, setTest] = useState(TEST_DEFAULTS);
+  const EMPTY_TEST = { to: "", from: "", body: "", callbackUrl: "" };
+  // A fresh Test form: randomized phones + sample body when the setting is on,
+  // otherwise every field blank.
+  const freshTest = (randomize) => randomize
+    ? { to: randomPhone(), from: randomPhone(), body: TEST_DEFAULTS.body, callbackUrl: "" }
+    : { ...EMPTY_TEST };
+  const [test, setTest] = useState(EMPTY_TEST);
   const [testResult, setTestResult] = useState(null);
 
   useEffect(() => {
@@ -91,9 +97,7 @@ export default function App() {
         setMessages(msgs);
         setWebhooks(hooks);
         setSettings(sett);
-        if (sett.randomizeTestPhones) {
-          setTest(t => ({ ...t, to: randomPhone(), from: randomPhone() }));
-        }
+        setTest(freshTest(sett.randomizeTestPhones));
         setConnected(true);
       } catch (e) {
         console.error("[smshog] init error:", e);
@@ -188,11 +192,7 @@ export default function App() {
     }
   }
   function clearTest() {
-    if (settings.randomizeTestPhones) {
-      setTest({ ...TEST_DEFAULTS, to: randomPhone(), from: randomPhone() });
-    } else {
-      setTest(TEST_DEFAULTS);
-    }
+    setTest(freshTest(settings.randomizeTestPhones));
     setTestResult(null);
   }
   async function testWebhook(id) {

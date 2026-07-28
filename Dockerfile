@@ -46,8 +46,13 @@ COPY metadata.json /metadata.json
 COPY docker-compose.yaml /docker-compose.yaml
 COPY smshog.svg /smshog.svg
 
-# Run as non-root user for security
-RUN chown -R node:node /app /ui /metadata.json /docker-compose.yaml /smshog.svg
+# Run as non-root user for security.
+# Create /app/data so that a fresh named volume mounted here inherits node
+# ownership — Docker copies the image mountpoint's ownership into an empty
+# volume. Without this, the volume is created root-owned and the non-root
+# process cannot open the SQLite DB (SQLITE_CANTOPEN → crash loop).
+RUN mkdir -p /app/data && \
+    chown -R node:node /app /ui /metadata.json /docker-compose.yaml /smshog.svg
 USER node
 
 CMD ["node", "backend/server.js"]
